@@ -1,32 +1,32 @@
-# 学员数据分析练习
+# Student Data Analysis Practice
 
-## 项目目的
+## Purpose
 
-读取学员名单 CSV，统计总人数、各国分布、对赌完成率，输出 JSON 报告。重点是练习面对"脏数据"时的处理思路——保留有效字段、如实暴露数据质量问题，而不是一刀切丢弃。
+Read a student roster CSV and compute totals, country distribution, and bet completion rate, then output a JSON report. The focus is on practicing how to handle "dirty data" — preserving valid fields and transparently reporting data quality issues, rather than blindly discarding rows.
 
-## 怎么运行
+## How to run
 
 ```bash
 pip install pandas
-python analyzer.py
+python csv_student_data_analyzer.py
 ```
 
-脚本会读取同目录下的 `students.csv`，在终端打印一份人类可读的摘要，并生成 `report.json`。如果 `students.csv` 不存在，脚本会打印提示并以退出码 `1` 异常退出。
+The script reads `students.csv` in the same directory, prints a human-readable summary to the terminal, and writes `report.json`. If `students.csv` is missing, the script prints a notice and exits with code `1`.
 
-### 查询单个学员
+### Look up a single student
 
 ```bash
-python analyzer.py alice
+python csv_student_data_analyzer.py alice
 ```
 
-直接在命令行后接姓名（或姓名片段）即可，按**子串匹配、不区分大小写**。命中多人会全部列出，没命中会提示"没找到"。注意：带查询参数时只做查询、不会生成 `report.json`。
+Pass any name (or name fragment) as a positional argument. Matching is **case-insensitive substring**. Multiple matches are all listed; if nothing matches, you get a "not found" message. When a query argument is passed, only the lookup runs — `report.json` is not regenerated.
 
-## report.json 字段说明
+## report.json field reference
 
-- `total_students` (int)：学员总数。包含含脏数据的行（脏字段不影响统计有效性时不丢弃）。
-- `country_distribution` (dict)：各国学员数。key 是国家名，value 是该国学员数。
-- `bet_completion_rate` (float, 0~1)：对赌完成率 = `bet_status == "completed"` 的人数 / 总人数，保留 4 位小数。例：`0.3333` 表示 33.33%。
-- `data_quality` (dict)：数据质量报告，便于评估"脏数据占比"。
-  - `total_rows`：CSV 总行数（脏数据占比的分母参照）。
-  - `email_missing`：`email` 字段缺失的行数。
-  - `date_unparseable`：`joined_date` 不符合 `YYYY-MM-DD` 格式、解析失败的行数。
+- `total_students` (int): Total student count. Includes rows with dirty fields (since dirty fields don't invalidate the statistic).
+- `country_distribution` (dict): Student count per country. Key is the country name, value is the count.
+- `bet_completion_rate` (float, 0~1): Completion rate = count of `bet_status == "completed"` / total students, rounded to 4 decimals. Example: `0.3333` means 33.33%.
+- `data_quality` (dict): Data quality report, for assessing dirty-row prevalence.
+  - `total_rows`: Total rows in the CSV (denominator for the dirty-row ratio).
+  - `email_missing`: Number of rows with a missing `email`.
+  - `date_unparseable`: Number of rows whose `joined_date` doesn't match `YYYY-MM-DD` and failed parsing.
