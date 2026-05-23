@@ -1,0 +1,15 @@
+{
+  "total_students": 15,
+  "country_distribution": {
+    "Singapore": 4,
+    "USA": 4,
+    "China": 4,
+    "Australia": 3
+  },
+  "bet_completion_rate": 0.3333,
+  "data_quality": {
+    "total_rows": 15,
+    "email_missing": 1,
+    "date_unparseable": 1
+  }
+}
